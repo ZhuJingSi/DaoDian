@@ -1,0 +1,42 @@
+/* pages/comment/comment.wxss */
+.container {
+  padding:100rpx 0;
+}
+.title {
+  align-self: flex-start;
+  margin-left: 60rpx;
+  margin-bottom: 80rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.time {
+  display: block;
+  color: #9ba3af;
+  font-size: 30rpx;
+  font-weight: normal;
+}
+.star {
+  padding: 20rpx;
+  width: 90rpx;
+  height: 90rpx;
+}
+.star-red {
+  color: #f56e25;
+}
+.star-gray {
+  color: #ccd1d9;
+}
+.star-description {
+  color: #9ba3af;
+}
+.comment {
+  margin-top: 40rpx;
+  width: 100%;
+}
+.weui-textarea {
+  height: 200rpx;
+}
+button {
+  margin-top: 60rpx;
+  width: 90%;
+}

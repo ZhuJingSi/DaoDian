@@ -1,0 +1,51 @@
+<!--menu.wxml-->
+<!-- loading 动画 -->
+<view class="center" wx:if="{{(!daoUserInfo || !options.length || closed) && !noToday && !noOrder}}">
+  <div style="color: #f4696b" class="la-ball-clip-rotate-pulse la-3x">
+    <div></div>
+    <div></div>
+  </div>
+</view>
+
+<view class="container" wx:if="{{(daoUserInfo && options.length && !closed) && !noToday && !noOrder}}">
+  <view class="head">
+    <text class='title'>今日菜单</text>
+    <view class="countDown">
+      <text>距离点餐结束还剩</text>
+      <text>{{countDown}}</text>
+    </view>
+  </view>
+  <form report-submit="true" bindsubmit="formSubmit">
+    <button class="option-bar {{chooseIndex == index ? 'active':''}}" wx:for="{{options}}" wx:key="name" data-index="{{index}}" data-foodid="{{item.id}}" bindtap='choose' formType="submit">
+      <view class='option-bar-main'>
+        <view class='left'>
+          <view class='pic'>
+            <image mode='aspectFill' src="{{host + item.picture}}"></image>
+          </view>
+        </view>
+        <view class="right">
+          <view class="info">
+            <view>
+              <view class='name'>
+                <text>{{item.name}}</text>
+              </view>
+              <view class="num">已有 <text>{{item.order_count}}</text> 人下单</view>
+            </view>
+            <view class="description">{{item.description}}</view>
+          </view>
+          <view class='state'>
+            <image class="choose" src='/image/choose.png'></image>
+            <image class="tick" src='/image/tick.png'></image>
+          </view>
+        </view>
+      </view>
+      <view class='option-bar-percent' style='width:{{item.percent}}%;'></view>
+    </button>
+  </form>
+</view>
+
+<view class="center" wx:if="{{noToday}}">今天没有加班餐哦～</view>
+<view class="center" wx:if="{{noOrder}}">
+  <view>今天点餐已结束</view>
+  <view>下次别错过哦～</view>
+</view>

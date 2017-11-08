@@ -1,0 +1,143 @@
+/* pages/menu/menu.wxss */
+.container {
+  align-items: stretch;
+  padding: 0;
+}
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20rpx 40rpx;
+}
+.title {
+  flex: 1;
+  font-size: 50rpx;
+  font-weight: bold;
+}
+.countDown {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30rpx;
+  color: #9ba3af;
+}
+.option-bar {
+  display: block;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 20rpx 0;
+  background-color: #fff;
+  box-shadow: 0 2rpx 8rpx rgba(204, 209, 217, 0.3);
+  text-align: left;
+  line-height: normal;
+}
+.option-bar::after {
+  border: none;
+}
+.option-bar-main {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  height: 200rpx;
+  font-size: 30rpx;
+}
+.option-bar-percent {
+  width: 0;
+  height: 8rpx;
+  background-color: #fe2b0c;
+  transition: width .2s ease;
+}
+.option-bar-main .left {
+  display: inline-flex;
+  align-items: center;
+}
+.option-bar-main .right {
+  flex: 1;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-left: 20rpx;
+  height: 180rpx;
+}
+.option-bar-main .right .info {
+  display: inline-flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.option-bar-main .right .name {
+  font-size: 40rpx;
+  font-weight: bolder;
+}
+.option-bar-main .right .num {
+  opacity: 0.4;
+}
+.option-bar-main .right .num text {
+  color: #fe6f22;
+  font-weight: bolder;
+}
+.option-bar-main .right .description {
+  opacity: 0.4;
+}
+.pic {
+  display: inline-block;
+  width: 180rpx;
+  height: 180rpx;
+}
+image {
+  width: 100%;
+  height: 100%;
+  border-radius: 5%;
+}
+.state {
+  margin-top: 10rpx;
+  position: relative;
+  width: 100rpx;
+  height: 50rpx;
+}
+.tick,
+.choose {
+  position: absolute;
+}
+.tick {
+  transform: scale(0);
+}
+.active .tick {
+  transform: scale(1);
+  animation: bounceIn .3s forwards linear;
+}
+.choose {
+  transform: scale(1);
+}
+.active .choose {
+  transform: scale(0);
+  animation: scale .3s forwards linear;
+}
+
+@keyframes bounceIn{
+  0%{
+    opacity: 0;
+    transform: scale(0.3) translate3d(0,0,0);
+  }
+  50%{
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  80%{
+    opacity: 1;
+    transform: scale(0.89);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1) translate3d(0,0,0);
+  }
+}

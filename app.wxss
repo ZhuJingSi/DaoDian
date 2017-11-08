@@ -1,0 +1,26 @@
+/**app.wxss**/
+@import "style/weui.wxss";
+@import "style/loading.wxss";
+page{
+  background-color: #F8F8F8;
+  font-size: 16px;
+  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
+}
+form{
+  width: 100%;
+}
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}
+button[type="primary"] {
+  background-color: #fe2b0c;
+}
+.button-hover[type="primary"] {
+  background-color: #e62509;
+}

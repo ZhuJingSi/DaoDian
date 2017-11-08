@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/menu/menu",
+    "pages/index/index",
+    "pages/comment/comment"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "道点",
+    "navigationBarBackgroundColor": "#f8f8f8",
+    "backgroundColor": "#f8f8f8"
+  }
+}

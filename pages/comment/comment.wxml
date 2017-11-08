@@ -1,0 +1,44 @@
+<!--pages/comment/comment.wxml-->
+<view class="container" wx:if="{{!ifHaveComments}}">
+  <text class='title'>这次味道怎么样？</text>
+  <text>你这次吃的是：{{foodName}}</text>
+  <view bindtap="myStarChoose">
+    <block wx:for="{{starMap}}" wx:key="starMap">
+      <image class="star star-red" mode='aspectFill' src='/image/star-light.svg' wx:if="{{star>=index+1}}" data-star="{{index+1}}"></image>
+      <image class="star star-gray" mode='aspectFill' src='/image/star-gray.svg' wx:if="{{star<index+1}}" data-star="{{index+1}}"></image>
+    </block>
+  </view>
+
+  <text class="star-description">{{starMap[star-1]}}</text>
+
+  <form report-submit="true" bindsubmit="formSubmit">
+    <view class="comment weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <textarea name="textarea" class="weui-textarea" placeholder="趁着余味未散，写下此刻的心情吧"  />
+          <view class="weui-textarea-counter">0/200</view>
+        </view>
+      </view>
+    </view>
+    <button formType="submit" type="primary">提交</button>
+  </form>
+</view>
+
+<view class="container" wx:if="{{ifHaveComments}}">
+  <view class='title'>
+    <text>你对 {{foodName}} 的点评</text>
+    <text class="time" wx:if="{{commentTime}}">{{commentTime}}</text>
+  </view>
+
+  <view>
+    <block wx:for="{{starMap}}" wx:key="starMap">
+      <image class="star star-red" mode='aspectFill' src='/image/star-light.svg' wx:if="{{star>=index+1}}" data-star="{{index+1}}"></image>
+      <image class="star star-gray" mode='aspectFill' src='/image/star-gray.svg' wx:if="{{star<index+1}}" data-star="{{index+1}}"></image>
+    </block>
+  </view>
+
+  <text class="star-description">{{starMap[star-1]}}</text>
+  <view class='comment'  style='width: 90%'>
+    <text>{{comment.content}}</text>
+  </view>
+</view>

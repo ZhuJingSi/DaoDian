@@ -78,7 +78,7 @@ Page({
   },
 
   // 获取今日菜单
-  getTodayInfo: function () {
+  getTodayInfo: function (isRefresh) {
     const _this = this
     app.request({
       api: 'menus/today',
@@ -94,6 +94,14 @@ Page({
         _this.setData({
           noToday: true
         })
+      },
+      complete: function () {
+        if (isRefresh) {
+          wx.showToast({
+            title: '已是最新数据',
+            icon: 'success'
+          });
+        }
       }
     })
   },
@@ -146,15 +154,32 @@ Page({
     const _this = this
     const menuId = this.data.menuId
     const foodId = e.currentTarget.dataset.foodid
-    const api = `menu/${menuId}/order/${foodId}`
-    app.request({
-      api,
-      method: 'POST',
-      data: {},
-      success: function (res) {
-        _this.getTodayInfo()
-      }
-    })
+    const index = e.currentTarget.dataset.index
+    // 点击已选选项则视为取消行为
+    if (_this.data.chooseIndex === index) {
+      const api = `menu/${menuId}/order`
+      app.request({
+        api,
+        method: 'DELETE',
+        data: {},
+        success: function (res) {
+          _this.setData({
+            chooseIndex: null
+          })
+          _this.getTodayInfo()
+        }
+      })
+    } else {
+      const api = `menu/${menuId}/order/${foodId}`
+      app.request({
+        api,
+        method: 'POST',
+        data: {},
+        success: function (res) {
+          _this.getTodayInfo()
+        }
+      })
+    }
   },
 
   // 偷偷获取 formid
@@ -200,6 +225,11 @@ Page({
     clearInterval(showCountDownInterval)
     // 关闭 socket 连接
     wx.closeSocket()
+  },
+
+  // 刷新
+  refresh: function () {
+    this.getTodayInfo(true)
   },
 
   /**

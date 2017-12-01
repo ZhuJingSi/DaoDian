@@ -1,8 +1,8 @@
 // app.js
 App({
   globalData: {
-    host: 'https://cisy.kyonr.com',
-    wss: 'wss://cisy.kyonr.com/socket.io/?EIO=3&transport=websocket',
+    host: 'https://daodian.daocloud.io',
+    wss: 'wss://daodian.daocloud.io/socket.io/?EIO=3&transport=websocket',
     code: null,
     userInfo: null,
     daoUserInfo: null,
@@ -19,7 +19,9 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         console.log('login code', res.code)
         this.globalData.code = res.code;
+        console.log('start this.getUserInfo()');
         this.getUserInfo()
+        console.log('end this.getUserInfo()');
       }
     })
   },
@@ -28,25 +30,35 @@ App({
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
+          console.log(res);
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              console.log('userInfo', res.userInfo)
-              this.globalData.userInfo = res.userInfo
-
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-
-              this.getToken()
+              this.userInfoReady(res);
+            }
+          })
+        } else {
+          wx.authorize({
+            scope: 'scope.userInfo',
+            success: res => {
+              this.userInfoReady(res);
             }
           })
         }
       }
     })
+  },
+  userInfoReady: function (setting) {
+    // 可以将 setting 发送给后台解码出 unionId
+    console.log('userInfo', setting.userInfo)
+    this.globalData.userInfo = setting.userInfo
+
+    // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+    // 所以此处加入 callback 以防止这种情况
+    if (this.userInfoReadyCallback) {
+      this.userInfoReadyCallback(setting)
+    }
+    this.getToken()
   },
   // 获取 token
   getToken: function () {

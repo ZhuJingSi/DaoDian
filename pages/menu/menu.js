@@ -1,6 +1,6 @@
 // pages/menu/menu.js
 
-const io = require('../../utils/wxapp-socket-io/dist/index')
+const io = require('../../utils/socketio')
 
 //获取应用实例
 const app = getApp()
@@ -49,9 +49,21 @@ Page({
     this.clear()
   },
 
+  // wexin original socket
+  connectWxSocket: function () {
+    wx.connectSocket({ url: 'wss://daodian.daocloud.io/socket.io/?EIO=3&transport=websocket'})
+    wx.onSocketOpen(function(res) {
+      console.log('WebSocket连接已打开！')
+    })
+    wx.sendSocketMessage('sss')
+    wx.onSocketMessage(function(res) {
+      console.log('收到服务器内容：' + res.data)
+    })
+  },
+
   // 建立 websocket 连接
   connectSocket: function () {
-    const socket = app.globalData.socket = io.connect(app.globalData.wss)
+    let socket = app.globalData.socket = new io(app.globalData.wss)
     socket.on('connect', res => {
       console.log('SocketIO 连接已打开！')
     });
@@ -63,7 +75,7 @@ Page({
     })
     // 注册菜单相关事件
     socket.on(MENU_UPDATE, data => {
-      console.log('on MENU_UPDATE:', data)
+      console.log('收到今日菜单更新:', data)
       this.showCountDown(data.deadline.replace('+08:06', '').replace(/-/g, '/'))
       this.setData({
         menuId: data.id,

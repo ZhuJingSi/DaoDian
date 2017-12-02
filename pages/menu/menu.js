@@ -49,18 +49,6 @@ Page({
     this.clear()
   },
 
-  // wexin original socket
-  connectWxSocket: function () {
-    wx.connectSocket({ url: 'wss://daodian.daocloud.io/socket.io/?EIO=3&transport=websocket'})
-    wx.onSocketOpen(function(res) {
-      console.log('WebSocket连接已打开！')
-    })
-    wx.sendSocketMessage('sss')
-    wx.onSocketMessage(function(res) {
-      console.log('收到服务器内容：' + res.data)
-    })
-  },
-
   // 建立 websocket 连接
   connectSocket: function () {
     let socket = app.globalData.socket = new io(app.globalData.wss)
@@ -80,6 +68,7 @@ Page({
       this.setData({
         menuId: data.id,
         options: data.foods,
+        noToday: false
       })
       this.ifDue(data)
     })
@@ -157,6 +146,10 @@ Page({
       // 标记当前用户已选的餐品
       if (this.data.daoUserInfo) {
         this.getChosen(this.data.daoUserInfo.id, this.data.options)
+        this.setData({
+          closed: todayInfo.closed,
+          noOrder: todayInfo.closed
+        })
       }
     }
   },
@@ -228,15 +221,25 @@ Page({
     const hour = Math.floor((leftsecond - day * 24 * 60 * 60) / 3600)
     const minute = Math.floor((leftsecond - day * 24 * 60 * 60 - hour * 3600) / 60)
     const second = Math.floor(leftsecond - day * 24 * 60 * 60 - hour * 3600 - minute * 60)
-    return { day, hour, minute, second }
+    return {
+      day,
+      hour,
+      minute,
+      second
+    }
   },
 
   // 显示倒计时
   showCountDown: function (deadline) {
     if (showCountDownInterval) clearInterval(showCountDownInterval);
     const _this = this
-    showCountDownInterval = setInterval(function() {
-      const { day, hour, minute, second } = _this.countDown(deadline)
+    showCountDownInterval = setInterval(function () {
+      const {
+        day,
+        hour,
+        minute,
+        second
+      } = _this.countDown(deadline)
       _this.setData({
         countDown: `${hour}:${minute}:${second}`
       })

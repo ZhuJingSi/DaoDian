@@ -1,9 +1,14 @@
 // pages/menu/menu.js
 
+const io = require('../../utils/wxapp-socket-io/dist/index')
+
 //获取应用实例
 const app = getApp()
 let getDaoUserInfoInterval = null
 let showCountDownInterval = null
+
+//事件
+const MENU_UPDATE = 'MenuUpdate' // 今日菜单更新事件
 
 Page({
   /**
@@ -46,19 +51,25 @@ Page({
 
   // 建立 websocket 连接
   connectSocket: function () {
-    wx.connectSocket({
-      url: app.globalData.wss
+    const socket = app.globalData.socket = io.connect(app.globalData.wss)
+    socket.on('connect', res => {
+      console.log('SocketIO 连接已打开！')
+    });
+    socket.on('disconnect', res => {
+      console.log('SocketIO 连接已断开！')
+    });
+    socket.on('message', res => {
+      console.log('收到消息', res)
     })
-    wx.onSocketOpen(function(res) {
-      console.log('WebSocket连接已打开！')
-    })
-    wx.onSocketError(function(res) {
-      console.log('WebSocket连接打开失败，请检查！')
-    })
-    wx.onSocketMessage(function(res) {
-      if (res.data[0] === '0') return
-      const data = JSON.parse(res.data.slice(res.data.indexOf('[')))
-      console.log('收到服务器内容：' + data)
+    // 注册菜单相关事件
+    socket.on(MENU_UPDATE, data => {
+      console.log('on MENU_UPDATE:', data)
+      this.showCountDown(data.deadline.replace('+08:06', '').replace(/-/g, '/'))
+      this.setData({
+        menuId: data.id,
+        options: data.foods,
+      })
+      this.ifDue(data)
     })
   },
 
@@ -210,6 +221,7 @@ Page({
 
   // 显示倒计时
   showCountDown: function (deadline) {
+    if (showCountDownInterval) clearInterval(showCountDownInterval);
     const _this = this
     showCountDownInterval = setInterval(function() {
       const { day, hour, minute, second } = _this.countDown(deadline)

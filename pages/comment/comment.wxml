@@ -27,7 +27,7 @@
 <view class="container" wx:if="{{ifHaveComments}}">
   <view class='title'>
     <text>你对 {{foodName}} 的点评</text>
-    <text class="time" wx:if="{{commentTime}}">{{commentTime}}</text>
+    <text class="time" wx:if="{{commentTime}}">时间：{{commentTime}}</text>
   </view>
 
   <view>

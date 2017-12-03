@@ -1,5 +1,6 @@
 // pages/comment/comment.js
 
+const utils = require('../../utils/util')
 //获取应用实例
 const app = getApp()
 
@@ -36,7 +37,7 @@ Page({
         foodName: app.globalData.todayInfo.my_order.food.name,
         foodId: app.globalData.todayInfo.my_order.food.id,
         commentTime: app.globalData.todayInfo.my_order.comment &&
-        app.globalData.todayInfo.my_order.comment.comment_time.replace('+08:00', ''),
+        utils.formatTime(app.globalData.todayInfo.my_order.comment.comment_time),
       })
     }
   },

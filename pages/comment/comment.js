@@ -36,7 +36,7 @@ Page({
         foodName: app.globalData.todayInfo.my_order.food.name,
         foodId: app.globalData.todayInfo.my_order.food.id,
         commentTime: app.globalData.todayInfo.my_order.comment &&
-        app.globalData.todayInfo.my_order.comment.comment_time.replace('+08:06', ''),
+        app.globalData.todayInfo.my_order.comment.comment_time.replace('+08:00', ''),
       })
     }
   },

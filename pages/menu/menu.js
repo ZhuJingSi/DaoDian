@@ -1,9 +1,14 @@
 // pages/menu/menu.js
 
+const io = require('../../utils/socketio')
+
 //获取应用实例
 const app = getApp()
 let getDaoUserInfoInterval = null
 let showCountDownInterval = null
+
+//事件
+const MENU_UPDATE = 'MenuUpdate' // 今日菜单更新事件
 
 Page({
   /**
@@ -46,19 +51,26 @@ Page({
 
   // 建立 websocket 连接
   connectSocket: function () {
-    wx.connectSocket({
-      url: app.globalData.wss
+    let socket = app.globalData.socket = new io(app.globalData.wss)
+    socket.on('connect', res => {
+      console.log('SocketIO 连接已打开！')
+    });
+    socket.on('disconnect', res => {
+      console.log('SocketIO 连接已断开！')
+    });
+    socket.on('message', res => {
+      console.log('收到消息', res)
     })
-    wx.onSocketOpen(function(res) {
-      console.log('WebSocket连接已打开！')
-    })
-    wx.onSocketError(function(res) {
-      console.log('WebSocket连接打开失败，请检查！')
-    })
-    wx.onSocketMessage(function(res) {
-      if (res.data[0] === '0') return
-      const data = JSON.parse(res.data.slice(res.data.indexOf('[')))
-      console.log('收到服务器内容：' + data)
+    // 注册菜单相关事件
+    socket.on(MENU_UPDATE, data => {
+      console.log('收到今日菜单更新:', data)
+      this.showCountDown(data.deadline.replace('+08:00', '').replace(/-/g, '/'))
+      this.setData({
+        menuId: data.id,
+        options: data.foods,
+        noToday: false
+      })
+      this.ifDue(data)
     })
   },
 
@@ -83,7 +95,7 @@ Page({
     app.request({
       api: 'menus/today',
       success: function (res) {
-        _this.showCountDown(res.data.deadline.replace('+08:06', '').replace(/-/g, '/'))
+        _this.showCountDown(res.data.deadline.replace('+08:00', '').replace(/-/g, '/'))
         _this.setData({
           menuId: res.data.id,
           options: res.data.foods,
@@ -134,6 +146,10 @@ Page({
       // 标记当前用户已选的餐品
       if (this.data.daoUserInfo) {
         this.getChosen(this.data.daoUserInfo.id, this.data.options)
+        this.setData({
+          closed: todayInfo.closed,
+          noOrder: todayInfo.closed
+        })
       }
     }
   },
@@ -205,14 +221,25 @@ Page({
     const hour = Math.floor((leftsecond - day * 24 * 60 * 60) / 3600)
     const minute = Math.floor((leftsecond - day * 24 * 60 * 60 - hour * 3600) / 60)
     const second = Math.floor(leftsecond - day * 24 * 60 * 60 - hour * 3600 - minute * 60)
-    return { day, hour, minute, second }
+    return {
+      day,
+      hour,
+      minute,
+      second
+    }
   },
 
   // 显示倒计时
   showCountDown: function (deadline) {
+    if (showCountDownInterval) clearInterval(showCountDownInterval);
     const _this = this
-    showCountDownInterval = setInterval(function() {
-      const { day, hour, minute, second } = _this.countDown(deadline)
+    showCountDownInterval = setInterval(function () {
+      const {
+        day,
+        hour,
+        minute,
+        second
+      } = _this.countDown(deadline)
       _this.setData({
         countDown: `${hour}:${minute}:${second}`
       })

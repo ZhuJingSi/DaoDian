@@ -2,7 +2,7 @@
 App({
   globalData: {
     host: 'https://daodian.daocloud.io',
-    wss: 'wss://daodian.daocloud.io/socket.io/?EIO=3&transport=websocket',
+    wss: 'wss://daodian.daocloud.io/socket.io',
     code: null,
     userInfo: null,
     daoUserInfo: null,

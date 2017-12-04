@@ -97,7 +97,15 @@ Page({
       success: function (res) {
         app.globalData.todayInfo = res.data
         _this.init()
+        wx.stopPullDownRefresh();
       }
     })
-  }
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    this.refresh()
+  },
 });

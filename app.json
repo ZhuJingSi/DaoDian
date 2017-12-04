@@ -5,7 +5,7 @@
     "pages/comment/comment"
   ],
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "道点",
     "navigationBarBackgroundColor": "#f8f8f8",

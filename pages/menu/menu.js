@@ -108,6 +108,7 @@ Page({
         })
       },
       complete: function () {
+        wx.stopPullDownRefresh();
         if (isRefresh) {
           wx.showToast({
             title: '已是最新数据',
@@ -277,7 +278,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this.getTodayInfo()
   },
 
   /**

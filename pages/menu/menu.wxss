@@ -122,6 +122,11 @@ image {
   transform: scale(0);
   animation: scale .3s forwards linear;
 }
+.help {
+  color: #ccc;
+  font-size: 20rpx;
+  text-align: center;
+}
 
 @keyframes bounceIn{
   0%{

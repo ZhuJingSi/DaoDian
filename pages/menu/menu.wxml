@@ -42,6 +42,7 @@
       <view class='option-bar-percent' style='width:{{item.percent}}%;'></view>
     </button>
   </form>
+  <text class="help">点击菜品下单，再次点击已下单的菜品可以取消点餐</text>
 </view>
 
 <view class="center" style="text-align:center;" wx:if="{{noToday}}">

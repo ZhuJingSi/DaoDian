@@ -64,7 +64,7 @@ Page({
     // 注册菜单相关事件
     socket.on(MENU_UPDATE, data => {
       console.log('收到今日菜单更新:', data)
-      this.showCountDown(data.deadline.replace('+08:00', ''))
+      this.showCountDown(data.deadline)
       this.setData({
         menuId: data.id,
         options: data.foods,
@@ -95,7 +95,7 @@ Page({
     app.request({
       api: 'menus/today',
       success: function (res) {
-        _this.showCountDown(res.data.deadline.replace('+08:00', ''))
+        _this.showCountDown(res.data.deadline)
         _this.setData({
           menuId: res.data.id,
           options: res.data.foods,

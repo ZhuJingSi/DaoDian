@@ -48,13 +48,13 @@
 <view class="center" style="text-align:center;" wx:if="{{noToday}}">
   今天没有加班餐哦～
   <form report-submit="true" bindsubmit="formSubmit">
-    <button formType="submit" size="mini" style="margin-top: 20px" bindtap="getTodayInfo">刷新</button>
+    <button formType="submit" size="mini" style="margin-top: 20px;padding:0 1.3em;" bindtap="getTodayInfo">刷新</button>
   </form>
 </view>
 <view class="center" style="text-align:center;" wx:if="{{noOrder}}">
   <view>今天点餐已结束</view>
   <view>下次别错过哦～</view>
   <form report-submit="true" bindsubmit="formSubmit">
-    <button formType="submit" size="mini" style="margin-top: 20px" bindtap="getTodayInfo">刷新</button>
+    <button formType="submit" size="mini" style="margin-top: 20px;padding:0 1.3em;" bindtap="getTodayInfo">刷新</button>
   </form>
 </view>

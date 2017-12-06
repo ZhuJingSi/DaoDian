@@ -31,7 +31,7 @@ Page({
   init: function() {
     if (app.globalData.todayInfo) {
       this.setData({
-        ifHaveComments: app.globalData.todayInfo.my_order.my_rate,
+        ifHaveComments: !!app.globalData.todayInfo.my_order.comment,
         star: app.globalData.todayInfo.my_order.my_rate || 5,
         comment: app.globalData.todayInfo.my_order.comment,
         foodName: app.globalData.todayInfo.my_order.food.name,

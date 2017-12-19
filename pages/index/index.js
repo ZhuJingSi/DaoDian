@@ -71,7 +71,7 @@ Page({
           url: '../menu/menu'
         })
       },
-      fail: function () {
+      fail: function (res) {
         wx.showModal({
           title: '邮箱填写错误',
           content: '仅支持 DaoCloud 公司邮箱哦 ：）',

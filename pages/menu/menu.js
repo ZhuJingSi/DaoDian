@@ -260,6 +260,21 @@ Page({
     this.getTodayInfo(true)
   },
 
+  // 放大预览图片
+  preview: function (e) {
+    let urls = []
+    for (let i = 0; i < this.data.options.length; i++) {
+      const path = this.data.options[i].picture
+      urls.push(`${this.data.host}${path}`)
+    }
+    const index = e.currentTarget.dataset.index
+    const current = urls[index]
+    wx.previewImage({
+      current, // 当前显示图片的http链接
+      urls // 需要预览的图片http链接列表
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

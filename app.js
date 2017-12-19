@@ -68,6 +68,7 @@ App({
   },
   // 获取 token
   getToken: function () {
+    console.log('getToken')
     const _this = this
     this.request({
       api: 'login',
@@ -80,6 +81,12 @@ App({
         console.log('token', res.data)
         _this.globalData.token = res.data
         _this.checkToken()
+      },
+      fail: function (res) {
+        console.log('getToken fail', res)
+        wx.redirectTo({
+          url: '/pages/index/index'
+        })
       }
     })
   },

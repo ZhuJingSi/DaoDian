@@ -16,17 +16,20 @@
   margin: 0 20rpx 40rpx;
 }
 .title {
-  flex: 1;
   font-size: 50rpx;
   font-weight: bold;
 }
 .countDown {
-  flex: 1;
   display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   font-size: 30rpx;
   color: #9ba3af;
+}
+.countDown .time {
+  color: #fff;
+  border-radius: 4px;
+  background-color: #9ba3af;
+  text-align: center;
 }
 .option-bar {
   display: block;
@@ -60,12 +63,23 @@
   align-items: center;
 }
 .option-bar-main .right {
+  position: static;
   flex: 1;
   display: inline-flex;
   align-items: flex-start;
   justify-content: space-between;
   margin-left: 20rpx;
   height: 180rpx;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background-color: #fff;
+  box-shadow: none;
+  text-align: left;
+  line-height: normal;
+}
+.option-bar-main .right::after {
+  content: none;
 }
 .option-bar-main .right .info {
   display: inline-flex;

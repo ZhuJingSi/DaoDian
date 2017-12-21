@@ -1,5 +1,6 @@
 // pages/comment/comment.js
 
+const utils = require('../../utils/util')
 //获取应用实例
 const app = getApp()
 
@@ -30,13 +31,13 @@ Page({
   init: function() {
     if (app.globalData.todayInfo) {
       this.setData({
-        ifHaveComments: app.globalData.todayInfo.my_order.my_rate,
+        ifHaveComments: !!app.globalData.todayInfo.my_order.comment,
         star: app.globalData.todayInfo.my_order.my_rate || 5,
         comment: app.globalData.todayInfo.my_order.comment,
         foodName: app.globalData.todayInfo.my_order.food.name,
         foodId: app.globalData.todayInfo.my_order.food.id,
         commentTime: app.globalData.todayInfo.my_order.comment &&
-        app.globalData.todayInfo.my_order.comment.comment_time.replace('+08:06', ''),
+        utils.formatTime(app.globalData.todayInfo.my_order.comment.comment_time),
       })
     }
   },
@@ -96,7 +97,15 @@ Page({
       success: function (res) {
         app.globalData.todayInfo = res.data
         _this.init()
+        wx.stopPullDownRefresh();
       }
     })
-  }
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    this.refresh()
+  },
 });

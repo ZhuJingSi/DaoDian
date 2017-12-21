@@ -12,18 +12,18 @@
     <text class='title'>今日菜单</text>
     <view class="countDown">
       <text>距离点餐结束还剩</text>
-      <text>{{countDown}}</text>
+      <text class="time">{{countDown}}</text>
     </view>
   </view>
   <form report-submit="true" bindsubmit="formSubmit">
-    <button class="option-bar {{chooseIndex == index ? 'active':''}}" wx:for="{{options}}" wx:key="name" data-index="{{index}}" data-foodid="{{item.id}}" bindtap='choose' formType="submit">
+    <div class="option-bar {{chooseIndex == index ? 'active':''}}" wx:for="{{options}}" wx:key="name">
       <view class='option-bar-main'>
         <view class='left'>
           <view class='pic'>
-            <image mode='aspectFill' src="{{host + item.picture}}"></image>
+            <image mode='aspectFill' src="{{host + item.picture}}" data-index="{{index}}" catchtap="preview"></image>
           </view>
         </view>
-        <view class="right">
+        <button class="right" data-index="{{index}}" data-foodid="{{item.id}}" bindtap='choose' formType="submit">
           <view class="info">
             <view>
               <view class='name'>
@@ -37,15 +37,24 @@
             <image class="choose" src='/image/choose.png'></image>
             <image class="tick" src='/image/tick.png'></image>
           </view>
-        </view>
+        </button>
       </view>
       <view class='option-bar-percent' style='width:{{item.percent}}%;'></view>
-    </button>
+    </div>
   </form>
+  <text class="help">点击餐品下单，再次点击已下单的餐品可以取消点餐</text>
 </view>
 
-<view class="center" wx:if="{{noToday}}">今天没有加班餐哦～</view>
-<view class="center" wx:if="{{noOrder}}">
+<view class="center" style="text-align:center;" wx:if="{{noToday}}">
+  今天还未发布加班餐
+  <form report-submit="true" bindsubmit="formSubmit">
+    <button formType="submit" size="mini" style="margin-top: 20px;padding:0 1.3em;" bindtap="getTodayInfo">刷新</button>
+  </form>
+</view>
+<view class="center" style="text-align:center;" wx:if="{{noOrder}}">
   <view>今天点餐已结束</view>
   <view>下次别错过哦～</view>
+  <form report-submit="true" bindsubmit="formSubmit">
+    <button formType="submit" size="mini" style="margin-top: 20px;padding:0 1.3em;" bindtap="getTodayInfo">刷新</button>
+  </form>
 </view>

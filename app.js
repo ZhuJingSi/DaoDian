@@ -1,8 +1,8 @@
 // app.js
 App({
   globalData: {
-    host: 'https://cisy.kyonr.com',
-    wss: 'wss://cisy.kyonr.com/socket.io/?EIO=3&transport=websocket',
+    host: 'https://daodian.daocloud.io',
+    wss: 'wss://daodian.daocloud.io/socket.io',
     code: null,
     userInfo: null,
     daoUserInfo: null,
@@ -27,21 +27,39 @@ App({
   getUserInfo: function () {
     wx.getSetting({
       success: res => {
+        console.log('getSetting', res)
         if (res.authSetting['scope.userInfo']) {
+          console.log(res);
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               console.log('userInfo', res.userInfo)
               this.globalData.userInfo = res.userInfo
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(res)
               }
-
               this.getToken()
+            },
+            fail: res => {
+              console.log('getSetting fail:', res);
+            }
+          })
+        } else {
+          console.log('not authorized, authorizing');
+          wx.authorize({
+            scope: 'scope.userInfo',
+            success: res => {
+              console.log('authorize success', res);
+              this.getUserInfo();
+            },
+            fail: res => {
+              console.log('wx.authorize fail:', res);
+            },
+            complete: res => {
+              console.log('wx.authorize complete:', res);
             }
           })
         }
@@ -50,6 +68,7 @@ App({
   },
   // 获取 token
   getToken: function () {
+    console.log('getToken')
     const _this = this
     this.request({
       api: 'login',
@@ -62,6 +81,12 @@ App({
         console.log('token', res.data)
         _this.globalData.token = res.data
         _this.checkToken()
+      },
+      fail: function (res) {
+        console.log('getToken fail', res)
+        wx.redirectTo({
+          url: '/pages/index/index'
+        })
       }
     })
   },

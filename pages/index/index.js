@@ -45,7 +45,14 @@ Page({
   formSubmit: function (e) {
     const data = e.detail.value
     console.log('登记信息提交，携带数据为：', data)
-    if (!data.name || !data.email) return
+    if (!data.name || !data.email) {
+      wx.showModal({
+        title: '温馨提醒',
+        content: '请将个人信息填写完整',
+        showCancel: false
+      })
+      return
+    }
     app.request({
       api: 'register',
       method: 'POST',
@@ -62,6 +69,13 @@ Page({
         app.init()
         wx.redirectTo({
           url: '../menu/menu'
+        })
+      },
+      fail: function (res) {
+        wx.showModal({
+          title: '邮箱填写错误',
+          content: '仅支持 DaoCloud 公司邮箱哦 ：）',
+          showCancel: false
         })
       }
     }, e)

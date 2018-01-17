@@ -234,6 +234,7 @@ Page({
   showCountDown: function (deadline) {
     if (showCountDownInterval) clearInterval(showCountDownInterval);
     const _this = this
+    const p0 = (d) => String(d).padStart(2, '0')
     showCountDownInterval = setInterval(function () {
       const {
         day,
@@ -242,7 +243,7 @@ Page({
         second
       } = _this.countDown(deadline)
       _this.setData({
-        countDown: `${hour}:${minute}:${second}`
+        countDown: `${p0(hour)}:${p0(minute)}:${p0(second)}`
       })
     }, 1000)
   },

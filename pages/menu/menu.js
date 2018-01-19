@@ -138,7 +138,7 @@ Page({
             })
           } else {
             wx.redirectTo({
-              url: '../comment/comment'
+              url: '/pages/comment/comment'
             })
           }
         }
@@ -157,12 +157,19 @@ Page({
 
   // 标记当前用户已选的餐品
   getChosen: function (userId, menus) {
+    let setFlag = false
     for (let i = 0; i < menus.length; i++) {
       if (menus[i].orders.indexOf(userId) > -1) {
+        setFlag = true
         this.setData({
           chooseIndex: i
         })
       }
+    }
+    if(!setFlag) {
+      this.setData({
+        chooseIndex: null
+      })
     }
   },
 

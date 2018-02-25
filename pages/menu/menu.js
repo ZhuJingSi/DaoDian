@@ -32,6 +32,20 @@ Page({
    */
   onLoad: function (options) {
     this.getDaoUserInfo()
+    // this.connectSocket()
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    // 每次载入页面都重新连接 socket
+    console.log('onShow')
+    if (app.globalData.socket && app.globalData.socket.isConnected) {
+      console.log('close old socket')
+      app.globalData.socket.close()
+    }
+    console.log('connect new socket')
     this.connectSocket()
   },
 
@@ -253,7 +267,9 @@ Page({
     clearInterval(getDaoUserInfoInterval)
     clearInterval(showCountDownInterval)
     // 关闭 socket 连接
-    wx.closeSocket()
+    if (app.globalData.socket && app.globalData.socket.isConnected) {
+      app.globalData.socket.close()
+    }
   },
 
   // 刷新
@@ -280,13 +296,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
 
   },
 

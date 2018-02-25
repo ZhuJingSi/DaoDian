@@ -1,9 +1,14 @@
+/**
+ * 微信小程序专用 SocketIO 库
+ * 暂时不支持微信基础库 1.7.0 之后的 SocketTask
+ *
+ * 暂时不支持 room namespace 等特性
+ */
+
 /** socket.io 协议常量 */
 var packets = {
-  open: 0 // non-ws
-    ,
-  close: 1 // non-ws
-    ,
+  open: 0, // non-ws
+  close: 1, // non-ws
   ping: 2,
   pong: 3,
   message: 4,
@@ -22,6 +27,7 @@ var events = {
 
 class WxSocketIO {
   constructor(url) {
+    this.isConnected = false
     this.connect(url)
     this.url = url
     this._callbacks = {}
@@ -50,12 +56,13 @@ class WxSocketIO {
       wx.onSocketClose(result => {
         if (this.isConnected) {
           this.fire('error', new Error("The websocket was closed by server"))
+          this.isConnected = false
+          this.destroy()
+          console.log('socket closed unexpectedly, reconnect')
+          setTimeout(() => this.connect(url), 0.5)
         } else {
           this.fire('disconnect')
         }
-        this.isConnected = false
-        this.destory()
-        setTimeout(() => this.connect(url), 0.5)
       })
       wx.connectSocket({
         url: this._url(url)
@@ -85,8 +92,9 @@ class WxSocketIO {
     return new Promise((resolve, reject) => {
       if (this.isConnected) {
         this.isConnected = false
-        wx.onSocketClose(resolve)
+        // wx.onSocketClose(resolve)
         wx.closeSocket()
+        // this.fire('disconnect')
       } else {
         reject(new Error('socket is not connected'))
       }
@@ -113,7 +121,7 @@ class WxSocketIO {
     })
   }
 
-  destory() {
+  destroy() {
     this._callbacks = []
     clearInterval(this.pingCheckInterval)
   }
@@ -142,7 +150,7 @@ class WxSocketIO {
       try {
         let pack = JSON.parse(content);
         if (pack && pack.pingInterval) this.PING_CHECK_INTERVAL = pack.pingInterval;
-        this.ping_check()        
+        this.ping_check()
       } catch (error) {
         console.error('解析 ws 数据包失败：')
         console.error(error)
